@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sso">
+	<resultMap type="device" id="deviceResult">
+		<result property="ruleId" 				column="id"/>
+		<result property="deviceId" 			column="res_id"/>
+		<result property="deviceName" 			column="res_name"/>
+		<result property="deviceIp" 			column="res_ip"/>
+		<result property="networkId" 			column="network_id"/>
+		<result property="networkName" 			column="network_name"/>
+		<result property="deviceType" 			column="res_type"/>
+		<result property="deviceOs" 			column="res_os_type"/>
+	</resultMap>
+	
+	<select id="query" parameterType="java.util.HashMap" resultMap="deviceResult">
+		<![CDATA[
+			SELECT
+			  `id`,
+			  `res_id`,
+			  `res_name`,
+			  `res_ip`,
+			  `network_id`,
+			  `network_name`,
+			  `res_type`,
+			  `res_os_type`
+			FROM `rule`
+		]]>
+		<where>
+			<if test="userName != null and userName != ''">
+				<![CDATA[
+					AND `emp_username` = #{userName}
+				]]>
+			</if>
+			<if test="keyword != null and keyword != ''">
+				<![CDATA[
+					AND (`res_name` LIKE CONCAT('%',#{keyword},'%') OR `res_ip` LIKE CONCAT('%',#{keyword},'%')
+					 	OR `network_name` LIKE CONCAT('%',#{keyword},'%')  OR `res_type` LIKE CONCAT('%',#{keyword},'%')
+					 	OR `res_os_type` LIKE CONCAT('%',#{keyword},'%')
+					)
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="count" parameterType="java.util.HashMap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM `rule`
+		]]>
+		<where>
+			<if test="userName != null and userName != ''">
+				<![CDATA[
+					AND `emp_username` = #{userName}
+				]]>
+			</if>
+			<if test="keyword != null and keyword != ''">
+				<![CDATA[
+					AND (`res_name` LIKE CONCAT('%',#{keyword},'%') OR `res_ip` LIKE CONCAT('%',#{keyword},'%')
+					 	OR `network_name` LIKE CONCAT('%',#{keyword},'%')  OR `res_type` LIKE CONCAT('%',#{keyword},'%')
+					 	OR `res_os_type` LIKE CONCAT('%',#{keyword},'%')
+					)
+				]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryAccount" parameterType="int" resultType="java.lang.String">
+		<![CDATA[
+			SELECT `account` FROM `rule_account` WHERE `rule_id` = #{ruleId}
+		]]>
+	</select>
+</mapper>  

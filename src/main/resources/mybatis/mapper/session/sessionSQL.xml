@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="session">
+	<resultMap type="session" id="sessionResult">
+		<result property="id" 				column="id"/>
+		<result property="randomId" 		column="random_id"/>
+		<result property="resId" 			column="res_id"/>
+		<result property="userName" 		column="user_name"/>
+		<result property="account" 			column="account"/>
+		<result property="createTime" 		column="create_tim"/>
+	</resultMap>
+	
+	<select id="findOne" parameterType="java.util.HashMap" resultMap="sessionResult">
+		<![CDATA[
+			SELECT
+			  `id`,
+			  `random_id`,
+			  `res_id`,
+			  `user_name`,
+			  `account`,
+			  `create_time`
+			FROM `session`
+		]]>
+		<where>
+			<if test="randomId != null and randomId != ''">
+				<![CDATA[
+					AND random_id = #{randomId}
+				]]>
+			</if>
+			<if test="userName != null and userName != ''">
+				<![CDATA[
+					AND user_name = #{userName}
+				]]>
+			</if>
+			<if test="resId != null and resId != ''">
+				<![CDATA[
+					AND res_id = #{resId}
+				]]>
+			</if>
+			<if test="account != null and account != ''">
+				<![CDATA[
+					AND account = #{account}
+				]]>
+			</if>
+		</where>
+		<![CDATA[
+			LIMIT 1
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="session">
+		<![CDATA[
+			INSERT INTO `session`
+            (`random_id`,
+             `res_id`,
+             `user_name`,
+             `account`,
+             `create_time`)
+			VALUES (#{randomId},
+			        #{resId},
+			        #{userName},
+			        #{account},
+			        #{createTime})
+		]]>
+		<selectKey keyProperty="id" resultType="java.lang.Integer">
+			<![CDATA[
+				SELECT @@IDENTITY AS id
+			]]>
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			DELETE FROM `session` WHERE `id` = #{id}
+		]]>
+	</delete>
+</mapper>

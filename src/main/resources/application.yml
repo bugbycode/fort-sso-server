@@ -1,0 +1,16 @@
+server:
+  port: 9992
+spring:
+  sso:
+    oauth:
+      clientId: fort
+      clientSecret: j1d1sec.c0m
+      checkTokenUrl: http://dev.server:8080/fort-auth-server/oauth/check_token
+    server:
+      datasource:
+        url: jdbc:mysql://dev.server:3306/new_rule?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true
+        username: root
+        password: Zhigongzhang1991@
+        driverClassName: com.mysql.jdbc.Driver
+logging:
+  config: classpath:log4j2.xml
